@@ -15,10 +15,6 @@ set incsearch
 " Turn off the annoying cpp warnings
 let java_allow_cpp_keywords=""
 
-" Turn off highlighing of search results.  You can also run ":noh" after a
-" to remove highlighting for the last search.
-"set nohlsearch
-
 " Make backspace work like in a normal editor.
 set backspace=indent,eol,start
 
@@ -40,7 +36,7 @@ colors desert
 " Turn on the ruler
 set ruler
 
-" Brian's settings
+" Search settings
 set showmatch
 set ignorecase
 set smartcase
