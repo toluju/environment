@@ -1,10 +1,19 @@
+" Disable vi compatability mode
+set nocompatible
+
 " Set default size
 if has("gui_running")
-  set lines=40 columns=100
+  set lines=50 columns=200
 endif
 
 " Tab settings.
-set ts=8 sw=2 sts=2 expandtab 
+set tabstop=4
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+
+" Force utf8 encoding
+set encoding=utf-8
 
 " Preserve indentation when starting new lines.
 set autoindent
@@ -24,6 +33,9 @@ set modeline
 " Don't do word wrap
 set nowrap
 
+" Disable the gui toolbar
+set guioptions-=T
+
 " Enable syntax highlighting.
 syntax on
 
@@ -36,17 +48,47 @@ colors desert
 " Turn on the ruler
 set ruler
 
+" Disable backup files
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Set the swap file directory so that swap files aren't in the same
+" place as the files being edited. Not necessary with the above options,
+" but leaving it around if any of the options change.
+set dir=~/.vim/bak
+
+" Remap semi-colon to colon, save keystrokes
+nnoremap ; :
+
+" Remap the annoying help key
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+
+" Set the leader key to comma
+let mapleader = ","
+
+" Fix vim's regex handling
+nnoremap / /\v
+vnoremap / /\v
+
 " Search settings
+set ignorecase
 set showmatch
 set ignorecase
 set smartcase
 set hlsearch
 
-" To avoid cluttering directories, all backup files written to
-" one location
-set backup
-set backupdir=~/.vim/bak
+" Clear search highlight shortcut
+nnoremap <leader><space> :noh<cr>
 
-" Set the swap file directory so that swap files aren't in the same
-" place as the files being edited.
-set dir=~/.vim/bak
+" Jump to matching brace shortcut
+nnoremap <tab> %
+vnoremap <tab> %
+
+" Autosave on lose focus
+au FocusLost * :wa
+
+" Key binding to close a buffer without closing the window split
+nmap ,d :b#<bar>bd#<CR>

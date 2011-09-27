@@ -12,6 +12,9 @@ HISTFILESIZE=10000
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# Allow recursive globbing with **
+shopt -s globstar
+
 # Make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -43,8 +46,18 @@ alias ..='cd ..'
 alias less='less -R'
 alias ssh='ssh -XY'
 
+# Git prompt functions
+function parse_git_dirty {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+}
+
 # Prompt
-export PS1='\[\033[1;32m\]\u\[\033[0m\]@\[\033[1;31m\]\h\[\033[0m\] \[\033[1;33m\]\w\[\033[0m\]$ '
+export PROMPT_DIRTRIM=4
+export PS1='\[\033[1;32m\]\u\[\033[0m\]@\[\033[1;31m\]\h\[\033[0m\] \[\033[1;33m\]\w\[\033[0m\]$(__git_ps1 " [\[\e[0;32m\]%s\[\e[0m\]\[\e[0;33m\]$(parse_git_dirty)\[\e[0m\]]")$ '
 
 # Enable programmable completion features
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
