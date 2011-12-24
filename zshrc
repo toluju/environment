@@ -48,35 +48,38 @@ export LS_COLORS
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
+# Speed up completion (see http://lethalman.blogspot.com/2009/10/speeding-up-zsh-completion.html)
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
 # Aliases
 alias rc='source ~/.zshrc'
 alias ls='ls --color'
 alias less='less -R'
 alias ssh='ssh -XY'
-alias mm='mvn install'
-alias mmcd='mvn clean install'
-
-# Show a time report for operations that take longer than 5 seconds
-REPORTTIME=5
-TIMEFMT="%U user %S system %P cpu %*Es total"
 
 # Don't hang up on processes when exiting the terminal
 setopt nohup
 
 # Prompt
-PROMPT="%{$fg[green]%}%n%{$reset_color%}@%{$fg[cyan]%}%m%{$reset_color%} %{$fg[yellow]%}%32<..<%~%{$reset_color%} %# "
+PROMPT="%{$fg_bold[green]%}%n%{$reset_color%}@%{$fg_bold[red]%}%m%{$reset_color%} %{$fg_bold[yellow]%}%36<..<%~%{$reset_color%} %# "
 
-# Show VCS info in the right-side prompt - taken from http://physos.com/2010/09/24/my-custom-zsh-prompt/
+# Show VCS info in the right-side prompt (see http://physos.com/2010/09/24/my-custom-zsh-prompt/)
 autoload -Uz vcs_info
 if function_exists vcs_info; then
   setopt prompt_subst
-  zstyle ':vcs_info:*' actionformats "[%F{blue}%b|%a%f]"
-  zstyle ':vcs_info:*' formats "[%F{blue}%s%f|%F{blue}%b%f]"
+  zstyle ':vcs_info:*' unstagedstr "%{$fg_bold[yellow]%}*%{$reset_color%} "
+  zstyle ':vcs_info:*' actionformats "[%u%F{green}%b%a%f]"
+  zstyle ':vcs_info:*' formats "[%u%F{green}%b%f]"
   zstyle ':vcs_info:*' branchformat "%b"
+  zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:git:*' check-for-changes true
-  zstyle ':vcs_info:git:*' formats "%F{red}%c %u%f [%F{blue}%b%f]"
-  zstyle ':vcs_info:git:*' actionformats "%F{red}%c %u%f [%F{blue}%b%f|%F{blue}%a%f}]"
-  zstyle ':vcs_info:*' enable git cvs svn
   precmd() { vcs_info }
   RPROMPT='${vcs_info_msg_0_}'
 fi
+
+# Make sure git completions are fast by only looking at local data
+__git_files () {
+  _wanted files expl 'local files' _files
+}

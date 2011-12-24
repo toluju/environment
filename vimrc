@@ -69,10 +69,6 @@ vnoremap <F1> <ESC>
 " Set the leader key to comma
 let mapleader = ","
 
-" Fix vim's regex handling
-nnoremap / /\v
-vnoremap / /\v
-
 " Search settings
 set ignorecase
 set showmatch
@@ -86,9 +82,6 @@ nnoremap <leader><space> :noh<cr>
 " Jump to matching brace shortcut
 nnoremap <tab> %
 vnoremap <tab> %
-
-" Autosave on lose focus
-au FocusLost * :wa
 
 " Key binding to close a buffer without closing the window split
 nmap ,d :b#<bar>bd#<CR>
